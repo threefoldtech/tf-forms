@@ -1,12 +1,9 @@
 <template>
-  <UserDashboard />
+  <router-view />
 </template>
 
 <script lang="ts">
-import UserDashboard from './views/UserDashboard.vue'
-
 export default {
-  components: { UserDashboard },
   name: 'App'
 }
 </script>

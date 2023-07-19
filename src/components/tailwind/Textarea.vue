@@ -1,17 +1,16 @@
 <template>
   <div>
-    <label class="block text-sm font-medium leading-6 text-gray-900">{{ label }}</label>
-    <span class="block text-xs leading-6 text-gray-700" v-if="subLabel">
-      {{ subLabel }}
-    </span>
+    <label class="block text-sm font-medium leading-6 text-gray-900">
+      {{ label }}
+    </label>
     <div class="mt-1">
-      <input
-        :type="type"
+      <textarea
+        :rows="rows || 4"
         class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-        :placeholder="placeholder || ''"
-        :required="required"
         :value="$props.modelValue"
         @input="$emit('update:model-value', $event)"
+        :placeholder="placeholder || ''"
+        :required="required"
       />
     </div>
   </div>
@@ -21,14 +20,13 @@
 import type { PropType } from 'vue'
 
 export default {
-  name: 'TInput',
+  name: 'TTextarea',
   props: {
     label: String,
-    subLabel: String,
+    rows: Number,
+    modelValue: { type: String as PropType<any> },
     placeholder: String,
-    required: Boolean,
-    type: String,
-    modelValue: { type: String as PropType<any> }
+    required: Boolean
   }
 }
 </script>
