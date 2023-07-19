@@ -1,46 +1,111 @@
 <template>
   <section>
     <h1 class="text-5xl font-bold mb-10">Contact Form</h1>
+    <div id="test">Loading...</div>
 
-    <form>
-      <t-input label="Email" type="email" placeholder="Your email" required />
+    <form
+      ref="formElement"
+      hx-post="https://jsonplaceholder.typicode.com/users/1"
+      hx-target="#test"
+      hx-ext="json-enc"
+      hx-confirm="Are you sure you wish to delete your account?"
+    >
+      <FormRenderer v-model="contactForm" />
 
-      <div class="my-5">
-        <t-input label="Telephone Number" type="text" placeholder="Your answer" required />
-      </div>
-
-      <t-textarea label="Some more information About You" placeholder="Your answer" />
-
-      <div class="my-5">
-        <span class="block mb-3">
-          <span class="block text-sm font-medium leading-6 text-gray-900">
-            What are you interested in?
-          </span>
-          <span class="text-xs">
-            Please choose what is relevant for you, can select more than one.
-          </span>
-        </span>
-
-        <t-checkbox label="ThreeFold Cloud = automous cloud as basis for a new Internet" />
-        <t-checkbox
-          label="OurWorld Venture Creator = our mother company, giving birth to companies like ThreeFold"
-        />
-        <t-checkbox
-          label="Blocks of Licenses/Slots for Companies in a New Sovereign Digital FreeZone"
-        />
-        <t-checkbox label="I don't know yet" />
-      </div>
-
-      <t-btn>Submit</t-btn>
+      <t-btn type="submit">Submit</t-btn>
     </form>
   </section>
 </template>
 
 <script lang="ts">
-import { TInput, TTextarea, TCheckbox, TBtn } from '../components/tailwind'
+import FormRenderer, { type FormInput } from '../components/FormRenderer.vue'
+
+import { TBtn } from '../components/tailwind'
+import { onMounted, ref, watch } from 'vue'
+
+const KEY = 'CONTACT_FORM'
 
 export default {
   name: 'ContactForm',
-  components: { TInput, TTextarea, TCheckbox, TBtn }
+  components: { FormRenderer, TBtn },
+  setup() {
+    const formElement = ref(null)
+    onMounted(() => (window as any).htmx.process(formElement.value))
+
+    let form: FormInput[] = [
+      {
+        label: 'Email',
+        placeholder: 'Your email',
+        type: 'email',
+        value: '',
+        name: 'email'
+      },
+      {
+        label: 'Telephone Number',
+        placeholder: 'Your answer',
+        value: '',
+        class: 'my-5',
+        name: 'phone'
+      },
+      {
+        label: 'Some more information About You',
+        placeholder: 'Your answer',
+        type: 'textarea',
+        value: '',
+        class: 'mb-5',
+        name: 'about'
+      },
+      {
+        label: 'What are you interested in?',
+        subLabel: 'Please choose what is relevant for you, can select more than one.',
+        type: 'block'
+      },
+      {
+        label: 'ThreeFold Cloud = automous cloud as basis for a new Internet',
+        type: 'checkbox',
+        value: false,
+        name: 'tf-cloud'
+      },
+      {
+        label:
+          'OurWorld Venture Creator = our mother company, giving birth to companies like ThreeFold',
+        type: 'checkbox',
+        value: false,
+        name: 'venture-creator'
+      },
+      {
+        label: 'Blocks of Licenses/Slots for Companies in a New Sovereign Digital FreeZone',
+        type: 'checkbox',
+        value: false,
+        name: 'licenses'
+      },
+      {
+        label: "I don't know yet",
+        type: 'checkbox',
+        value: false,
+        class: 'mb-7',
+        name: 'dk'
+      }
+    ]
+
+    const maybeContactForm = localStorage.getItem(KEY)
+    if (maybeContactForm === null) {
+      localStorage.setItem(KEY, JSON.stringify(form))
+    } else {
+      form = JSON.parse(maybeContactForm!)
+    }
+
+    const contactForm = ref<FormInput[]>(form)
+    watch(
+      contactForm,
+      (form) => {
+        localStorage.setItem(KEY, JSON.stringify(form))
+        console.log(form)
+      },
+      { deep: true }
+    )
+
+    return { contactForm, formElement }
+  }
 }
 </script>

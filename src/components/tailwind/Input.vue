@@ -11,7 +11,8 @@
         :placeholder="placeholder || ''"
         :required="required"
         :value="$props.modelValue"
-        @input="$emit('update:model-value', $event)"
+        @input="updateModelValue"
+        :name="$props.name"
       />
     </div>
   </div>
@@ -28,7 +29,17 @@ export default {
     placeholder: String,
     required: Boolean,
     type: String,
+    name: String,
     modelValue: { type: String as PropType<any> }
+  },
+  emits: { 'update:model-value': (value: any) => value },
+  setup(_, { emit }) {
+    return {
+      updateModelValue(e: Event) {
+        const target = e.target as HTMLInputElement
+        emit('update:model-value', target.value)
+      }
+    }
   }
 }
 </script>
