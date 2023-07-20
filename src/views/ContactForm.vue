@@ -1,12 +1,10 @@
 <template>
   <section>
     <h1 class="text-5xl font-bold mb-10">Contact Form</h1>
-    <div id="test">Loading...</div>
 
     <form
       ref="formElement"
       hx-post="https://jsonplaceholder.typicode.com/users/1"
-      hx-target="#test"
       hx-ext="json-enc"
       hx-confirm="Are you sure you wish to delete your account?"
     >
