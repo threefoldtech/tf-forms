@@ -16,14 +16,14 @@
       v-else-if="item.type === 'checkbox'"
     />
 
-    <span class="block mb-3" v-else-if="item.type === 'block'">
-      <span class="block text-sm font-medium leading-6 text-gray-900">
-        {{ item.label }}
-      </span>
-      <span class="text-xs" v-if="item.subLabel">
-        {{ item.subLabel }}
-      </span>
+    <span :class="'block mb-3 ' + (item.class || '')" v-else-if="item.type === 'block'">
+      <span class="block text-sm font-medium leading-6 text-gray-900" v-html="item.label" />
+      <span class="text-xs" v-if="item.subLabel" v-html="item.subLabel" />
     </span>
+
+    <template v-else-if="item.type === 'radio'">
+      <t-radio-group :name="item.name" :inputs="item.radioInputs" v-model="item.value" />
+    </template>
 
     <t-input
       :name="item.name || ''"
@@ -40,22 +40,23 @@
 
 <script lang="ts">
 import type { PropType } from 'vue'
-import { TTextarea, TCheckbox, TInput } from './tailwind'
+import { TTextarea, TCheckbox, TInput, TRadioGroup } from './tailwind'
 
 export interface FormInput {
-  label: string
+  label?: string
   name?: string
   subLabel?: string
   placeholder?: string
-  type?: 'text' | 'textarea' | 'checkbox' | 'email' | 'number' | 'block'
+  type?: 'text' | 'textarea' | 'checkbox' | 'email' | 'number' | 'block' | 'radio'
   value?: any
   required?: boolean
   class?: string
+  radioInputs?: { label: string; value: any }[]
 }
 
 export default {
   name: 'FormRenderer',
-  components: { TTextarea, TCheckbox, TInput },
+  components: { TTextarea, TCheckbox, TInput, TRadioGroup },
   props: {
     modelValue: {
       type: Array as PropType<Array<FormInput>>,

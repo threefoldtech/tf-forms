@@ -12,7 +12,7 @@
       />
     </div>
     <div class="ml-3 text-sm leading-6">
-      <label :for="'checkbox-' + uid" class="text-gray-900">{{ label }}</label>
+      <label :for="'checkbox-' + uid" class="text-gray-900" v-html="label" />
     </div>
   </div>
 </template>

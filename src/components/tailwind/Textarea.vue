@@ -1,8 +1,6 @@
 <template>
   <div>
-    <label class="block text-sm font-medium leading-6 text-gray-900">
-      {{ label }}
-    </label>
+    <label class="block text-sm font-medium leading-6 text-gray-900" v-html="label" />
     <div class="mt-1">
       <textarea
         :rows="rows || 4"

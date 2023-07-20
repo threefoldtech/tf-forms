@@ -1,9 +1,7 @@
 <template>
   <div>
-    <label class="block text-sm font-medium leading-6 text-gray-900">{{ label }}</label>
-    <span class="block text-xs leading-6 text-gray-700" v-if="subLabel">
-      {{ subLabel }}
-    </span>
+    <label class="block text-sm font-medium leading-6 text-gray-900" v-html="label" />
+    <span class="block text-xs leading-6 text-gray-700" v-if="subLabel" v-html="subLabel" />
     <div class="mt-1">
       <input
         :type="type"
