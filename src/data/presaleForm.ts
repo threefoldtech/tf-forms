@@ -6,19 +6,22 @@ export const presaleFormData: FormInput[][] = [
       label: 'Email',
       placeholder: 'Your email',
       type: 'email',
+      name: 'email',
       value: ''
     },
     {
       label: 'Telephone Number',
       placeholder: 'Your answer',
       value: '',
-      class: 'my-5'
+      class: 'my-5',
+      name: 'phone'
     },
     {
       label: 'Referral code',
       subLabel: 'Ask whoever introduced you to get such a code.',
       value: '',
-      placeholder: 'Your answer'
+      placeholder: 'Your answer',
+      name: 'referral_code'
     }
   ],
   [
