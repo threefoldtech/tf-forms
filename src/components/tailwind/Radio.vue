@@ -9,7 +9,7 @@
   />
   <label
     :for="'radio-' + uid"
-    class="ml-3 block text-sm font-medium leading-6 text-gray-900"
+    class="ml-1 block text-sm font-medium leading-6 text-gray-900"
     v-html="label"
   />
 </template>

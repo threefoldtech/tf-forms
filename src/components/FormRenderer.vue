@@ -22,7 +22,13 @@
     </span>
 
     <template v-else-if="item.type === 'radio'">
-      <t-radio-group :name="item.name" :inputs="item.radioInputs" v-model="item.value" />
+      <t-radio-group
+        :name="item.name"
+        :inputs="item.radioInputs"
+        v-model="item.value"
+        :inline="item.inline"
+        :label="item.label"
+      />
     </template>
 
     <t-input
@@ -52,6 +58,7 @@ export interface FormInput {
   required?: boolean
   class?: string
   radioInputs?: { label: string; value: any }[]
+  inline?: boolean
 }
 
 export default {
