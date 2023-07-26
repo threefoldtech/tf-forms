@@ -39,14 +39,8 @@
                 v-model="code"
               />
 
-              <div>
-                <button
-                  type="submit"
-                  class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  :disabled="loading"
-                >
-                  {{ loading ? 'Loading...' : 'Register' }}
-                </button>
+              <div class="mt-2">
+                <t-btn :loading="loading" type="submit" block>Verify</t-btn>
               </div>
             </FormManager>
           </div>
@@ -65,12 +59,12 @@
 
 <script lang="ts">
 import { ref } from 'vue'
-import { TInput } from '../components/tailwind'
+import { TInput, TBtn } from '../components/tailwind'
 import FormManager from '@/components/FormManager.vue'
 
 export default {
   name: 'VerifyForm',
-  components: { TInput, FormManager },
+  components: { TInput, FormManager, TBtn },
   setup() {
     const email = ref('')
     const code = ref('')
