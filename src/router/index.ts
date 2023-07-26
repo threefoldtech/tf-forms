@@ -8,8 +8,8 @@ const router = createRouter({
       component: () => import('../views/LoginForm.vue')
     },
     {
-      path: '/register',
-      component: () => import('../views/RegisterForm.vue')
+      path: '/verify',
+      component: () => import('../views/VerifyForm.vue')
     },
     {
       path: '/dashboard',

@@ -17,18 +17,41 @@
 
         <div class="mt-10">
           <div>
-            <form action="#" method="POST" class="space-y-6">
-              <t-input label="Email" placeholder="Your email address" name="email" required />
+            <FormManager
+              :data="{
+                link: 'http://localhost:5173/verify',
+                email
+              }"
+              :hx="{
+                post: 'https://4bd3-156-203-129-143.ngrok-free.app/login',
+                ext: 'json-enc'
+              }"
+              @before:submit="loading = true"
+              @after:submit="afterRequest"
+            >
+              <t-input
+                label="Email"
+                placeholder="Your email address"
+                name="email"
+                required
+                v-model="email"
+                @input="
+                  () => {
+                    if (error) {
+                      error = ''
+                    }
+                  }
+                "
+              />
 
-              <div>
-                <button
-                  type="submit"
-                  class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Sign in
-                </button>
+              <div class="mt-2" v-if="error">
+                <TAlert type="error"> {{ error }} </TAlert>
               </div>
-            </form>
+
+              <div class="mt-2">
+                <t-btn type="submit" :loading="loading" block>Login</t-btn>
+              </div>
+            </FormManager>
           </div>
         </div>
       </div>
@@ -44,10 +67,30 @@
 </template>
 
 <script lang="ts">
-import { TInput } from '../components/tailwind'
+import { ref } from 'vue'
+import FormManager from '@/components/FormManager.vue'
+import { TBtn, TInput, TAlert } from '@/components/tailwind'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'LoginForm',
-  components: { TInput }
+  components: { TInput, FormManager, TBtn, TAlert },
+  setup() {
+    const email = ref('')
+    const loading = ref(false)
+    const error = ref('')
+    const router = useRouter()
+
+    function afterRequest(response: { message?: string }) {
+      loading.value = false
+      if (response.message) {
+        error.value = response.message
+      } else {
+        router.push('/verify')
+      }
+    }
+
+    return { email, loading, error, afterRequest }
+  }
 }
 </script>

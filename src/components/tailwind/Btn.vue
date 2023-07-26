@@ -7,11 +7,13 @@
       'bg-indigo-600 hover:bg-indigo-500 focus-visible:outline-indigo-600': color === 'primary',
       'bg-red-600 hover:bg-red-500 focus-visible:outline-red-600': color === 'error',
       'bg-green-600 hover:bg-green-500 focus-visible:outline-green-600': color === 'success',
-      'opacity-60 pointer-events-none': disabled
+      'opacity-60 pointer-events-none': disabled || loading,
+      'w-full': block
     }"
     :disabled="disabled"
   >
-    <slot></slot>
+    <template v-if="loading">Loading...</template>
+    <slot v-else></slot>
   </button>
 </template>
 
@@ -27,6 +29,14 @@ export default {
       default: () => 'primary'
     },
     disabled: {
+      type: Boolean,
+      default: () => false
+    },
+    loading: {
+      type: Boolean,
+      default: () => false
+    },
+    block: {
       type: Boolean,
       default: () => false
     }

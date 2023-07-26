@@ -11,37 +11,44 @@
             alt="Your Company"
           />
           <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Register a new account
+            Verify your account
           </h2>
         </div>
 
         <div class="mt-10">
           <div>
-            <form action="#" method="POST" class="space-y-6">
-              <t-input label="Email" placeholder="Your email address" name="email" required />
+            <FormManager
+              :hx="{ post: 'https://4bd3-156-203-129-143.ngrok-free.app/verify', ext: 'json-enc' }"
+              :data="{ email, code }"
+              @before:submit="loading = true"
+              @after:submit="loading = false"
+            >
               <t-input
-                label="Password"
-                type="password"
-                placeholder="Your password"
-                name="password"
+                label="Email"
+                placeholder="Your email address"
+                name="email"
                 required
+                v-model="email"
               />
               <t-input
-                label="Confirm Password"
+                label="Code"
                 type="password"
-                placeholder="Your password confirmation"
+                placeholder="Your code"
+                name="code"
                 required
+                v-model="code"
               />
 
               <div>
                 <button
                   type="submit"
                   class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  :disabled="loading"
                 >
-                  Register
+                  {{ loading ? 'Loading...' : 'Register' }}
                 </button>
               </div>
-            </form>
+            </FormManager>
           </div>
         </div>
       </div>
@@ -57,10 +64,21 @@
 </template>
 
 <script lang="ts">
+import { ref } from 'vue'
 import { TInput } from '../components/tailwind'
+import FormManager from '@/components/FormManager.vue'
 
 export default {
-  name: 'RegisterForm',
-  components: { TInput }
+  name: 'VerifyForm',
+  components: { TInput, FormManager },
+  setup() {
+    const email = ref('')
+    const code = ref('')
+    const loading = ref(false)
+
+    /* store el code */
+
+    return { email, code, loading }
+  }
 }
 </script>

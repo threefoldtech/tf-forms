@@ -30,10 +30,11 @@ export default {
     name: String,
     modelValue: { type: String as PropType<any> }
   },
-  emits: { 'update:model-value': (value: any) => value },
+  emits: { 'update:model-value': (value: any) => value, input: (e: Event) => e },
   setup(_, { emit }) {
     return {
       updateModelValue(e: Event) {
+        emit('input', e)
         const target = e.target as HTMLInputElement
         emit('update:model-value', target.value)
       }

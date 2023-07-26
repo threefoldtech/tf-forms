@@ -1,5 +1,5 @@
 <template>
-  <form ref="form">
+  <form ref="form" hx-swap="none">
     <slot :props="{ current }"></slot>
   </form>
 </template>
@@ -22,7 +22,8 @@ export default {
     hx: { type: Object, default: () => ({}) },
     data: { type: Object, required: true }
   },
-  setup(props) {
+  emits: ['before:submit', 'after:submit'],
+  setup(props, { emit }) {
     const current = ref(0)
     provide(KEY, { current } as FormManagerService)
 
@@ -30,9 +31,24 @@ export default {
 
     const fn = (evt: any) => {
       evt.detail.parameters = props.data
+      emit('before:submit')
     }
 
-    onUnmounted(() => document.body.removeEventListener('htmx:configRequest', fn))
+    const fn2 = (evt: any) => {
+      let data = null
+      if (evt.detail?.xhr.response) {
+        data = JSON.parse(evt.detail.xhr.response)
+        if (typeof data === 'string') {
+          data = JSON.parse(data)
+        }
+      }
+      emit('after:submit', data)
+    }
+
+    onUnmounted(() => {
+      document.body.removeEventListener('htmx:configRequest', fn)
+      document.body.removeEventListener('htmx:afterRequest', fn2)
+    })
     onMounted(async () => {
       const f = form.value!
       for (const key in props.hx) f.setAttribute(`hx-${key}`, props.hx[key])
@@ -41,6 +57,7 @@ export default {
       $w.htmx.process(f)
 
       document.body.addEventListener('htmx:configRequest', fn)
+      document.body.addEventListener('htmx:afterRequest', fn2)
     })
 
     return { current, form }
