@@ -20,3 +20,5 @@ export function useFormData(key: string, fallbackData: FormInput[][]): Ref<FormI
 }
 
 export * from './investmentForm'
+export * from './contactForm'
+export * from './presaleForm'

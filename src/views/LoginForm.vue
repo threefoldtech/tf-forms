@@ -19,13 +19,6 @@
           <div>
             <form action="#" method="POST" class="space-y-6">
               <t-input label="Email" placeholder="Your email address" name="email" required />
-              <t-input
-                label="Password"
-                type="password"
-                placeholder="Your password"
-                name="password"
-                required
-              />
 
               <div>
                 <button
