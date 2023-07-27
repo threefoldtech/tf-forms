@@ -37,7 +37,7 @@ fn (mut app App) login() !vweb.Result {
 		return app.json(er.to_json())
 	}
 
-	resp := app.send_verification_email(email, code) or {
+	resp := app.send_verification_email(email) or {
 		app.set_status(500, 'Server Error')
 		er := CustomResponse{500, 'failed to send verification email'}
 		return app.json(er.to_json())
