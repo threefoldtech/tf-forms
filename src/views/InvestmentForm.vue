@@ -16,11 +16,13 @@
         invest_venture,
         invest_tf
       }"
+      @before:submit="loading = true"
+      @after:submit="loading = false"
     >
       <FormPages v-model="investmentForm" />
 
       <div class="mt-7">
-        <FormPagination :length="investmentForm.length" />
+        <FormPagination :length="investmentForm.length" :loading="loading" />
       </div>
     </FormManager>
   </section>
@@ -31,7 +33,7 @@ import FormPages from '../components/FormPages.vue'
 import FormPagination from '../components/FormPagination.vue'
 import FormManager from '../components/FormManager.vue'
 import { useFormData, investmentFormData } from '../data'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const KEY = 'INVESTMENT_FORM'
 
@@ -40,6 +42,7 @@ export default {
   components: { FormManager, FormPages, FormPagination },
   setup() {
     const investmentForm = useFormData(KEY, investmentFormData)
+    const loading = ref(false)
 
     return {
       investmentForm,
@@ -47,7 +50,8 @@ export default {
       referal_code: computed(() => investmentForm.value[0][2].value),
       invest_slots: computed(() => investmentForm.value[1][1].value),
       invest_venture: computed(() => investmentForm.value[1][3].value),
-      invest_tf: computed(() => investmentForm.value[1][5].value)
+      invest_tf: computed(() => investmentForm.value[1][5].value),
+      loading
     }
   }
 }

@@ -20,7 +20,13 @@
     >
       Next
     </t-btn>
-    <t-btn type="submit" :disabled="disableSubmit" v-else @click="$emit('click:submit', $event)">
+    <t-btn
+      type="submit"
+      :disabled="disableSubmit"
+      v-else
+      @click="$emit('click:submit', $event)"
+      :loading="loading"
+    >
       Submit
     </t-btn>
   </div>
@@ -37,7 +43,8 @@ export default {
     length: { type: Number, required: true },
     disableBack: Boolean,
     disableSubmit: Boolean,
-    disableNext: Boolean
+    disableNext: Boolean,
+    loading: Boolean
   },
   emits: {
     'click:submit': (e: MouseEvent) => e

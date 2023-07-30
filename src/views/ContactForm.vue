@@ -19,11 +19,13 @@
           dk
         }
       }"
+      @before:submit="loading = true"
+      @after:submit="loading = false"
     >
       <FormPages v-model="contactForm" />
 
       <div class="mt-7">
-        <FormPagination :length="contactForm.length" />
+        <FormPagination :length="contactForm.length" :loading="loading" />
       </div>
     </FormManager>
   </section>
@@ -34,7 +36,7 @@ import FormPages from '../components/FormPages.vue'
 import FormPagination from '../components/FormPagination.vue'
 import FormManager from '../components/FormManager.vue'
 import { useFormData, contactFormData } from '@/data'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const KEY = 'CONTACT_FORM'
 
@@ -43,6 +45,7 @@ export default {
   components: { FormManager, FormPages, FormPagination },
   setup() {
     const contactForm = useFormData(KEY, contactFormData)
+    const loading = ref(false)
 
     return {
       contactForm,
@@ -51,7 +54,8 @@ export default {
       cloud: computed(() => String(contactForm.value[0][4].value)),
       venture: computed(() => String(contactForm.value[0][5].value)),
       licenses: computed(() => String(contactForm.value[0][6].value)),
-      dk: computed(() => String(contactForm.value[0][7].value))
+      dk: computed(() => String(contactForm.value[0][7].value)),
+      loading
     }
   }
 }

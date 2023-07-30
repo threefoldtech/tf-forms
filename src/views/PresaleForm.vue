@@ -15,11 +15,13 @@
         node_orders,
         reason
       }"
+      @before:submit="loading = true"
+      @after:submit="loading = false"
     >
       <FormPages v-model="presaleForm" />
 
       <div class="mt-7">
-        <FormPagination :length="presaleForm.length" />
+        <FormPagination :length="presaleForm.length" :loading="loading" />
       </div>
     </FormManager>
   </section>
@@ -30,7 +32,7 @@ import FormPages from '../components/FormPages.vue'
 import FormPagination from '../components/FormPagination.vue'
 import FormManager from '../components/FormManager.vue'
 import { useFormData, presaleFormData } from '@/data'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const KEY = 'PRESALE_FORM'
 
@@ -39,6 +41,7 @@ export default {
   components: { FormManager, FormPages, FormPagination },
   setup() {
     const presaleForm = useFormData(KEY, presaleFormData)
+    const loading = ref(false)
 
     return {
       presaleForm,
@@ -56,7 +59,8 @@ export default {
           quantity: presaleForm.value[1][6 + i].value
         }))
       ),
-      reason: computed(() => presaleForm.value[1][9].value)
+      reason: computed(() => presaleForm.value[1][9].value),
+      loading
     }
   }
 }

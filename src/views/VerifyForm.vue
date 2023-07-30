@@ -29,6 +29,13 @@
                 name="email"
                 required
                 v-model="email"
+                @input="
+                  () => {
+                    if (error) {
+                      error = ''
+                    }
+                  }
+                "
               />
               <t-input
                 label="Code"
@@ -37,7 +44,18 @@
                 name="code"
                 required
                 v-model="code"
+                @input="
+                  () => {
+                    if (error) {
+                      error = ''
+                    }
+                  }
+                "
               />
+
+              <div class="mt-2" v-if="error">
+                <TAlert type="error"> {{ error }} </TAlert>
+              </div>
 
               <div class="mt-2">
                 <t-btn :loading="loading" type="submit" block>Verify</t-btn>
@@ -50,8 +68,8 @@
     <div class="relative hidden w-0 flex-1 lg:block">
       <img
         class="absolute inset-0 h-full w-full object-cover"
-        src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
-        alt=""
+        src="@/assets/login-parallax.jpg"
+        alt="login"
       />
     </div>
   </div>
@@ -59,26 +77,33 @@
 
 <script lang="ts">
 import { ref } from 'vue'
-import { TInput, TBtn } from '../components/tailwind'
+import { TInput, TBtn, TAlert } from '../components/tailwind'
 import FormManager from '@/components/FormManager.vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 export default {
   name: 'VerifyForm',
-  components: { TInput, FormManager, TBtn },
+  components: { TInput, FormManager, TBtn, TAlert },
   setup() {
+    const authStore = useAuthStore()
     const email = ref('')
     const code = ref('')
     const loading = ref(false)
     const router = useRouter()
+    const error = ref('')
 
-    function afterRequest(res: any) {
+    function afterRequest(res: { message?: string }) {
       loading.value = false
-      console.log({ res })
-      router.push('/dashboard/forms/contact')
+      if (res.message) {
+        error.value = res.message
+      } else {
+        authStore.login({ email: email.value, code: code.value })
+        router.push('/dashboard/forms/contact')
+      }
     }
 
-    return { email, code, loading, afterRequest }
+    return { email, code, loading, afterRequest, error }
   }
 }
 </script>
