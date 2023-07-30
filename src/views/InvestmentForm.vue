@@ -8,8 +8,8 @@
         ext: 'json-enc'
       }"
       :data="{
-        email: 'elmdarym@incubaid.com',
-        code: 'mohamed',
+        email: authStore.user?.email,
+        code: authStore.user?.code,
         phone,
         referal_code,
         invest_slots,
@@ -34,6 +34,7 @@ import FormPagination from '../components/FormPagination.vue'
 import FormManager from '../components/FormManager.vue'
 import { useFormData, investmentFormData } from '../data'
 import { computed, ref } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 
 const KEY = 'INVESTMENT_FORM'
 
@@ -43,6 +44,7 @@ export default {
   setup() {
     const investmentForm = useFormData(KEY, investmentFormData)
     const loading = ref(false)
+    const authStore = useAuthStore()
 
     return {
       investmentForm,
@@ -51,7 +53,8 @@ export default {
       invest_slots: computed(() => investmentForm.value[1][1].value),
       invest_venture: computed(() => investmentForm.value[1][3].value),
       invest_tf: computed(() => investmentForm.value[1][5].value),
-      loading
+      loading,
+      authStore
     }
   }
 }

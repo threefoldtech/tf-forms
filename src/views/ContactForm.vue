@@ -8,8 +8,8 @@
         ext: 'json-enc'
       }"
       :data="{
-        email: 'elmdarym@incubaid.com',
-        code: 'mohamed',
+        email: authStore.user?.email,
+        code: authStore.user?.code,
         phone,
         about,
         interests: {
@@ -36,7 +36,8 @@ import FormPages from '../components/FormPages.vue'
 import FormPagination from '../components/FormPagination.vue'
 import FormManager from '../components/FormManager.vue'
 import { useFormData, contactFormData } from '@/data'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 
 const KEY = 'CONTACT_FORM'
 
@@ -46,6 +47,17 @@ export default {
   setup() {
     const contactForm = useFormData(KEY, contactFormData)
     const loading = ref(false)
+    const authStore = useAuthStore()
+
+    onMounted(() => {
+      fetch(
+        `https://e68f-156-203-159-109.ngrok-free.app/contacts?email=${authStore.user!.email}&code=${
+          authStore.user!.code
+        }`
+      )
+        .then((res) => res.text())
+        .then(console.log)
+    })
 
     return {
       contactForm,
@@ -55,7 +67,8 @@ export default {
       venture: computed(() => String(contactForm.value[0][5].value)),
       licenses: computed(() => String(contactForm.value[0][6].value)),
       dk: computed(() => String(contactForm.value[0][7].value)),
-      loading
+      loading,
+      authStore
     }
   }
 }

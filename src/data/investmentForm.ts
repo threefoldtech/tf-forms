@@ -3,10 +3,8 @@ import type { FormInput } from '@/components/FormRenderer.vue'
 export const investmentFormData: FormInput[][] = [
   [
     {
-      label: 'Email',
-      placeholder: 'Your email',
-      type: 'email',
-      value: ''
+      label: '',
+      type: 'block'
     },
     {
       label: 'Telephone Number',

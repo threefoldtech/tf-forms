@@ -7,8 +7,8 @@
         ext: 'json-enc'
       }"
       :data="{
-        email: 'elmdarym@incubaid.com',
-        code: 'mohamed',
+        email: authStore.user?.email,
+        code: authStore.user?.code,
         phone,
         referal_code,
         phone_orders,
@@ -33,6 +33,7 @@ import FormPagination from '../components/FormPagination.vue'
 import FormManager from '../components/FormManager.vue'
 import { useFormData, presaleFormData } from '@/data'
 import { computed, ref } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 
 const KEY = 'PRESALE_FORM'
 
@@ -42,6 +43,7 @@ export default {
   setup() {
     const presaleForm = useFormData(KEY, presaleFormData)
     const loading = ref(false)
+    const authStore = useAuthStore()
 
     return {
       presaleForm,
@@ -60,7 +62,8 @@ export default {
         }))
       ),
       reason: computed(() => presaleForm.value[1][9].value),
-      loading
+      loading,
+      authStore
     }
   }
 }

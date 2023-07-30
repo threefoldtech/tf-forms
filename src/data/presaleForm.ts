@@ -3,11 +3,8 @@ import type { FormInput } from '@/components/FormRenderer.vue'
 export const presaleFormData: FormInput[][] = [
   [
     {
-      label: 'Email',
-      placeholder: 'Your email',
-      type: 'email',
-      name: 'email',
-      value: ''
+      label: '',
+      type: 'block'
     },
     {
       label: 'Telephone Number',

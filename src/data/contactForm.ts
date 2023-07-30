@@ -3,11 +3,8 @@ import type { FormInput } from '@/components/FormRenderer.vue'
 export const contactFormData: FormInput[][] = [
   [
     {
-      label: 'Email',
-      placeholder: 'Your email',
-      type: 'email',
-      value: '',
-      name: 'email'
+      label: '',
+      type: 'block'
     },
     {
       label: 'Telephone Number',
