@@ -25,7 +25,7 @@ pub fn (mut app App) create_or_update_investment() vweb.Result {
 		return app.json(er.to_json())
 	}
 
-	app.investments[investment.email] = investment
+	investments[investment.email] = investment
 	app.set_status(201, 'created')
 	return app.json(investment.to_json())
 }
@@ -38,7 +38,7 @@ fn (mut app App) get_investment() vweb.Result {
 		er := CustomResponse{404, contact_not_found}
 		return app.json(er.to_json())
 	}
-	investment := app.investments[email] or {
+	investment := investments[email] or {
 		app.set_status(404, 'Not Found')
 		er := CustomResponse{404, investment_not_found}
 		return app.json(er.to_json())
@@ -51,11 +51,11 @@ fn (mut app App) get_investment() vweb.Result {
 [middleware: check_admin]
 ['/invests/all'; get]
 fn (mut app App) get_investments() vweb.Result {
-	mut invests := []Investment{}
-	for _, invest in app.investments {
-		invests << invest
+	mut investments_list := []Investment{}
+	for _, invest in investments {
+		investments_list << invest
 	}
-	ret := json.encode(invests)
+	ret := json.encode(investments_list)
 	app.set_status(200, 'OK')
 	return app.json(ret)
 }

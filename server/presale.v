@@ -30,7 +30,7 @@ pub fn (mut app App) create_or_update_presale() vweb.Result {
 		return app.json(er.to_json())
 	}
 
-	app.presales[presale.email] = presale
+	presales[presale.email] = presale
 	app.set_status(201, 'created')
 	return app.json(presale.to_json())
 }
@@ -43,7 +43,7 @@ fn (mut app App) get_presale() vweb.Result {
 		er := CustomResponse{404, contact_not_found}
 		return app.json(er.to_json())
 	}
-	presale := app.presales[email] or {
+	presale := presales[email] or {
 		app.set_status(404, 'Not Found')
 		er := CustomResponse{404, presale_not_found}
 		return app.json(er.to_json())
@@ -57,11 +57,11 @@ fn (mut app App) get_presale() vweb.Result {
 [middleware: check_admin]
 ['/presales/all'; get]
 fn (mut app App) get_presales() vweb.Result {
-	mut presales := []Presale{}
-	for _, presale in app.presales {
-		presales << presale
+	mut presales_list := []Presale{}
+	for _, presale in presales {
+		presales_list << presale
 	}
-	ret := json.encode(presales)
+	ret := json.encode(presales_list)
 	app.set_status(200, 'OK')
 	return app.json(ret)
 }

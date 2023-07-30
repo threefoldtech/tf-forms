@@ -7,6 +7,12 @@ import os
 import flag
 import net.http
 
+__global (
+	contacts           map[string]Contact
+	investments        map[string]Investment
+	presales           map[string]Presale
+	verification_codes map[string]VerificationCode
+)
 pub struct App {
 	vweb.Context
 pub mut:

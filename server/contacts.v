@@ -30,7 +30,7 @@ fn (mut app App) create_or_update_contact() vweb.Result {
 		return app.json(er.to_json())
 	}
 
-	app.contacts[contact.email] = contact
+	contacts[contact.email] = contact
 	app.set_status(201, 'created')
 	return app.json(contact.to_json())
 }
@@ -43,7 +43,7 @@ fn (mut app App) get_contact() vweb.Result {
 		er := CustomResponse{404, contact_not_found}
 		return app.json(er.to_json())
 	}
-	contact := app.contacts[email] or {
+	contact := contacts[email] or {
 		app.set_status(404, 'Not Found')
 		er := CustomResponse{404, contact_not_found}
 		return app.json(er.to_json())
@@ -57,13 +57,12 @@ fn (mut app App) get_contact() vweb.Result {
 // [middleware: check_admin]
 ['/contacts/all'; get]
 fn (mut app App) get_contacts() vweb.Result {
-	mut contacts := []Contact{}
+	mut contacts_list := []Contact{}
 
-	contacts_map := app.contacts.clone()
-	for _, contact in contacts_map {
-		contacts << contact
+	for _, contact in contacts {
+		contacts_list << contact
 	}
-	ret := json.encode(contacts)
+	ret := json.encode(contacts_list)
 	app.set_status(200, 'OK')
 	return app.json(ret)
 }
