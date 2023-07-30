@@ -67,7 +67,7 @@ fn (mut app App) send_verification_email(email string) !http.Response {
 		from: 'foudaa@incubaid.com'
 		to: email
 		subject: 'Verification Email'
-		htmlbody: '<b>Hello</b> <b> please use this verification code: ${code} to verify email</b>/>'
+		htmlbody: '<b>Hello</b> <p> please use this verification code: <b>${code}</b> to verify email</p>'
 		textbody: 'Hello, please use this verification code: ${code} to verify email'
 		messagestream: 'outbound'
 	}
