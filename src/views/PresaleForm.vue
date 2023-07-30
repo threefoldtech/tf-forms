@@ -3,7 +3,7 @@
     <h1 class="text-5xl font-bold mb-10">Pre-Sale Form</h1>
     <FormManager
       :hx="{
-        post: $api + '/presale',
+        post: $api + '/presales',
         ext: 'json-enc'
       }"
       :data="{
