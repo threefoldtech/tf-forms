@@ -19,18 +19,6 @@ export function useFormData(key: string, fallbackData: FormInput[][]): Ref<FormI
   return form
 }
 
-export function getFormData(formData: FormInput[][]) {
-  const data: any = {}
-  for (const form of formData) {
-    for (const input of form) {
-      if (input.type === 'block' || !input.name) continue
-      data[input.name] = input.value
-    }
-  }
-
-  return data
-}
-
 export * from './investmentForm'
 export * from './contactForm'
 export * from './presaleForm'

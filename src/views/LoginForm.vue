@@ -23,7 +23,7 @@
                 email
               }"
               :hx="{
-                post: 'https://4bd3-156-203-129-143.ngrok-free.app/login',
+                post: $api + '/login',
                 ext: 'json-enc'
               }"
               @before:submit="loading = true"

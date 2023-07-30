@@ -37,14 +37,15 @@ export const investmentFormData: FormInput[][] = [
       type: 'radio',
       name: 'companys',
       radioInputs: [
-        { label: '100 company slots', value: '100' },
-        { label: '200 company slots', value: '200' },
-        { label: '500 company slots', value: '500' },
-        { label: '1,000 company slots', value: '1000' },
-        { label: '2,000 company slots', value: '2000' },
-        { label: '5,000 company slots', value: '5000' },
-        { label: 'more than 5,000', value: '>5000' }
-      ]
+        { label: '100 company slots', value: '100 company slots' },
+        { label: '200 company slots', value: '200 company slots' },
+        { label: '500 company slots', value: '500 company slots' },
+        { label: '1,000 company slots', value: '1,000 company slots' },
+        { label: '2,000 company slots', value: '2,000 company slots' },
+        { label: '5,000 company slots', value: '5,000 company slots' },
+        { label: 'more than 5,000', value: 'more than 5,000' }
+      ],
+      value: ''
     },
     {
       label: 'I would like to become an Investor in the OurWorld Venture Creator',
@@ -66,16 +67,41 @@ export const investmentFormData: FormInput[][] = [
     },
     {
       type: 'radio',
+      name: 'venture',
+      value: '',
+      radioInputs: [
+        { label: '50k EUR (is minimum)', value: '50k EUR  (is minimum)' },
+        { label: '100k EUR', value: '100k EUR' },
+        { label: '200k EUR', value: '200k EUR' },
+        { label: '500k EUR', value: '500k EUR' },
+        { label: '1000k EUR', value: '1000k EUR' },
+        { label: '2000k EUR', value: '2000k EUR' },
+        { label: '5000k EUR', value: '5000k EUR' },
+        { label: 'More', value: 'more' }
+      ]
+    },
+    {
+      type: 'block',
+      label: 'I would like to become an Investor in the ThreeFold Cloud Company',
+      subLabel: `
+      On of the companies from the Venture Creator is called ThreeFold.<br /><br />
+      ThreeFold is the result of 50m USD investment from the community, we are now going into commercial phase.<br /><br />
+      We organize a funding round where fast movers get an serious advantage. The investment is structured as a convertible loan with liquidation preference of 1.5 times as well as a conversion rights on valuation of 10m EUR if the investment happens part of the first batch which is in July 2023.<br /><br />
+      This is a business we have done many times before and our track record is very good, become part of the company who is building a real alternative to the googles, amazons of the world. We need a sovereign Internet,<br /><br />
+      Read more on <a href="http://infopack.threefold.io" target="_blank">http://infopack.threefold.io</a><br /><br />
+      <strong>"BE THE INTERNET"</strong><br /><br />
+      I would like to receive more information and might be interested to invest:<br /><br />
+      `
+    },
+    {
+      type: 'radio',
       name: 'investment',
       value: '',
       radioInputs: [
-        { label: '50k EUR (is minimum)', value: '50k' },
-        { label: '100k EUR', value: '100k' },
-        { label: '200k EUR', value: '200k' },
-        { label: '500k EUR', value: '500k' },
-        { label: '1000k EUR', value: '1000k' },
-        { label: '2000k EUR', value: '2000k' },
-        { label: '5000k EUR', value: '5000k' },
+        { label: '50k EUR (is minimum)', value: '50k EUR  (is minimum)' },
+        { label: '100k EUR', value: '100k EUR' },
+        { label: '200k EUR', value: '200k EUR' },
+        { label: '500k EUR', value: '500k EUR' },
         { label: 'More', value: 'more' }
       ]
     }

@@ -18,10 +18,10 @@
         <div class="mt-10">
           <div>
             <FormManager
-              :hx="{ post: 'https://4bd3-156-203-129-143.ngrok-free.app/verify', ext: 'json-enc' }"
+              :hx="{ post: $api + '/verify', ext: 'json-enc' }"
               :data="{ email, code }"
               @before:submit="loading = true"
-              @after:submit="loading = false"
+              @after:submit="afterRequest"
             >
               <t-input
                 label="Email"
@@ -61,6 +61,7 @@
 import { ref } from 'vue'
 import { TInput, TBtn } from '../components/tailwind'
 import FormManager from '@/components/FormManager.vue'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'VerifyForm',
@@ -69,10 +70,15 @@ export default {
     const email = ref('')
     const code = ref('')
     const loading = ref(false)
+    const router = useRouter()
 
-    /* store el code */
+    function afterRequest(res: any) {
+      loading.value = false
+      console.log({ res })
+      router.push('/dashboard/forms/contact')
+    }
 
-    return { email, code, loading }
+    return { email, code, loading, afterRequest }
   }
 }
 </script>
