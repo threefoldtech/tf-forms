@@ -21,8 +21,8 @@ struct VerificationData {
 }
 
 struct Admin {
-	email    string
-	password string
+	email string
+	code  string
 }
 
 struct EmailData {
@@ -115,7 +115,7 @@ fn (mut app App) login_admin() !vweb.Result {
 		er := CustomResponse{400, 'failed to decode admin data'}
 		return app.json(er.to_json())
 	}
-	if admin.email != app.admin_email || admin.password != app.admin_password {
+	if admin.email != app.admin_email || admin.code != app.admin_password {
 		app.set_status(401, 'Invalid credentials')
 		er := CustomResponse{401, 'Invalid credentials'}
 		return app.json(er.to_json())
