@@ -26,6 +26,16 @@ function shouldBeLogin(
   return next({ path: '/login' })
 }
 
+function shouldBeAdmin(
+  _: RouteLocationNormalized,
+  __: RouteLocationNormalized,
+  next: NavigationGuardNext
+) {
+  const auth = useAuthStore()
+  if (auth.isLogin && auth.isAdmin) return next()
+  return next({ path: '/login' })
+}
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -40,10 +50,20 @@ const router = createRouter({
       beforeEnter: [shouldBeNotLogin]
     },
     {
+      path: '/admin',
+      component: () => import('../views/LoginAdmin.vue'),
+      beforeEnter: [shouldBeNotLogin]
+    },
+    {
       path: '/dashboard',
       component: () => import('../views/UserDashboard.vue'),
       beforeEnter: [shouldBeLogin],
       children: [
+        {
+          path: '/dashboard/admin/:form',
+          component: () => import('../views/AdminView.vue'),
+          beforeEnter: [shouldBeAdmin]
+        },
         {
           path: '/dashboard/forms/contact',
           component: () => import('../views/ContactForm.vue'),

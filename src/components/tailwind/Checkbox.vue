@@ -9,6 +9,8 @@
         @input="updateModelValue"
         :name="name"
         :value="$props.modelValue"
+        :readonly="readonly"
+        :disabled="readonly"
       />
     </div>
     <div class="ml-3 text-sm leading-6">
@@ -25,7 +27,8 @@ export default {
   props: {
     label: String,
     modelValue: { type: Boolean },
-    name: String
+    name: String,
+    readonly: Boolean
   },
   emits: { 'update:model-value': (value: any) => value },
   setup(_, { emit }) {

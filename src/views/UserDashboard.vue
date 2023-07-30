@@ -98,7 +98,7 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
@@ -132,15 +132,21 @@ export default {
       router.push('/login')
     }
 
-    return {
-      authStore,
-      formRoutes,
-      sidebarOpen,
-      userNavigation: [
-        { name: 'Your profile', href: '#' },
-        { name: 'Sign out', href: '#' }
-      ],
-      dashboardRoutes: [
+    const dashboardRoutes = computed(() => {
+      if (authStore.isAdmin) {
+        return [
+          {
+            label: 'Admin Pages',
+            routes: [
+              { name: 'Contacts List', path: '/dashboard/admin/contacts', initial: 'C' },
+              { name: 'Investments List', path: '/dashboard/admin/invests', initial: 'T' },
+              { name: 'Pre-Sales List', path: '/dashboard/admin/presales', initial: 'W' }
+            ]
+          }
+        ]
+      }
+
+      return [
         {
           label: 'Your Forms',
           routes: [
@@ -149,7 +155,18 @@ export default {
             { name: 'Pre-Sale Form', path: '/dashboard/forms/pre-sale', initial: 'W' }
           ]
         }
+      ]
+    })
+
+    return {
+      authStore,
+      formRoutes,
+      sidebarOpen,
+      userNavigation: [
+        { name: 'Your profile', href: '#' },
+        { name: 'Sign out', href: '#' }
       ],
+      dashboardRoutes,
       logout
     }
   }

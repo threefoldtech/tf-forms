@@ -21,6 +21,7 @@
           :value="input.value"
           @update:model-value="$emit('update:model-value', $event)"
           :current="modelValue"
+          :readonly="readonly"
         />
       </div>
     </div>
@@ -40,7 +41,8 @@ export default {
     inputs: Array as PropType<FormInput['radioInputs']>,
     modelValue: { type: String, required: true },
     inline: { type: Boolean, default: () => false },
-    label: String
+    label: String,
+    readonly: Boolean
   },
   emits: { 'update:model-value': (value: string) => value }
 }

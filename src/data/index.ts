@@ -35,6 +35,9 @@ export function setData(
   form: FormInput[][],
   values: { [key: number]: { [key: number]: any } }
 ): FormInput[][] {
+  /* clone */
+  form = [...form.map((x) => [...x.map((y) => ({ ...y }))])]
+
   for (const x in values) {
     for (const y in values[x]) {
       form[x][y].value = values[x][y]

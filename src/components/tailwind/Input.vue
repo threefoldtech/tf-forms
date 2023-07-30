@@ -11,6 +11,7 @@
         :value="$props.modelValue"
         @input="updateModelValue"
         :name="$props.name"
+        :readonly="readonly || false"
       />
     </div>
   </div>
@@ -28,7 +29,8 @@ export default {
     required: Boolean,
     type: String,
     name: String,
-    modelValue: { type: String as PropType<any> }
+    modelValue: { type: String as PropType<any> },
+    readonly: Boolean
   },
   emits: { 'update:model-value': (value: any) => value, input: (e: Event) => e },
   setup(_, { emit }) {

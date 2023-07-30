@@ -1,6 +1,10 @@
 <template>
-  <div v-for="(_, index) in modelValue" v-show="index === manager.current.value" :key="index">
-    <FormRenderer v-model="$props.modelValue[index]" />
+  <div
+    v-for="(_, index) in modelValue"
+    v-show="manager ? index === manager.current.value : true"
+    :key="index"
+  >
+    <FormRenderer v-model="$props.modelValue[index]" :readonly="readonly" />
   </div>
 </template>
 
@@ -16,7 +20,8 @@ export default {
     modelValue: {
       type: Array as PropType<FormInput[][]>,
       required: true
-    }
+    },
+    readonly: Boolean
   },
   setup() {
     const manager = useFormManager()!

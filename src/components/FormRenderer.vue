@@ -6,6 +6,7 @@
       :placeholder="item.placeholder"
       :required="item.required"
       :name="item.name || ''"
+      :readonly="readonly"
       v-if="item.type === 'textarea'"
     />
 
@@ -13,6 +14,7 @@
       :label="item.label"
       :name="item.name || ''"
       v-model="item.value"
+      :readonly="readonly"
       v-else-if="item.type === 'checkbox'"
     />
 
@@ -28,6 +30,7 @@
         v-model="item.value"
         :inline="item.inline"
         :label="item.label"
+        :readonly="readonly"
       />
     </template>
 
@@ -39,6 +42,7 @@
       v-model="item.value"
       :placeholder="item.placeholder"
       :required="item.required"
+      :readonly="readonly"
       v-else
     />
   </div>
@@ -68,7 +72,8 @@ export default {
     modelValue: {
       type: Array as PropType<Array<FormInput>>,
       default: () => []
-    }
+    },
+    readonly: Boolean
   }
 }
 </script>

@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 export interface UserModel {
   email: string
   code: string
+  isAdmin?: boolean
 }
 
 export interface AuthState {
@@ -44,12 +45,18 @@ export const useAuthStore = defineStore('auth', {
     },
     logout() {
       setLocalStorageUser(null)
+      localStorage.removeItem('PRESALE_FORM')
+      localStorage.removeItem('INVESTMENT_FORM')
+      localStorage.removeItem('CONTACT_FORM')
       this.$state.user = null
     }
   },
   getters: {
     isLogin(): boolean {
       return this.user !== null
+    },
+    isAdmin(): boolean {
+      return this.user?.isAdmin === true
     }
   }
 })

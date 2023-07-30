@@ -24,20 +24,6 @@
               @after:submit="afterRequest"
             >
               <t-input
-                label="Email"
-                placeholder="Your email address"
-                name="email"
-                required
-                v-model="email"
-                @input="
-                  () => {
-                    if (error) {
-                      error = ''
-                    }
-                  }
-                "
-              />
-              <t-input
                 label="Code"
                 type="password"
                 placeholder="Your code"
@@ -76,10 +62,10 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { TInput, TBtn, TAlert } from '../components/tailwind'
 import FormManager from '@/components/FormManager.vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 export default {
@@ -91,7 +77,16 @@ export default {
     const code = ref('')
     const loading = ref(false)
     const router = useRouter()
+    const route = useRoute()
     const error = ref('')
+
+    onMounted(() => {
+      if (typeof route.query.email === 'string') {
+        email.value = route.query.email
+      } else {
+        router.push('/login')
+      }
+    })
 
     function afterRequest(res: { message?: string }) {
       loading.value = false

@@ -10,6 +10,7 @@
         :required="required"
         @input="updateModelValue"
         :name="name"
+        :readonly="readonly || false"
       />
     </div>
   </div>
@@ -26,7 +27,8 @@ export default {
     modelValue: { type: String as PropType<any> },
     placeholder: String,
     required: Boolean,
-    name: String
+    name: String,
+    readonly: Boolean
   },
   emits: { 'update:model-value': (value: string) => value },
   setup(_, { emit }) {
