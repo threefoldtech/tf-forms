@@ -19,15 +19,28 @@
           dk
         }
       }"
-      @before:submit="loading = true"
-      @after:submit="loading = false"
+      @before:submit="
+        () => {
+          loading = true
+          error = ''
+          success = false
+        }
+      "
+      @after:submit="afterRequest"
+      v-if="init"
     >
       <FormPages v-model="contactForm" />
 
       <div class="mt-7">
+        <div class="mb-3" v-if="success || error">
+          <t-alert :type="success ? 'success' : 'error'">
+            {{ error || 'Successfully saved your form.' }}
+          </t-alert>
+        </div>
         <FormPagination :length="contactForm.length" :loading="loading" />
       </div>
     </FormManager>
+    <p v-else class="font-bold animate-pulse text-center mt-32">Loading...</p>
   </section>
 </template>
 
@@ -35,29 +48,58 @@
 import FormPages from '../components/FormPages.vue'
 import FormPagination from '../components/FormPagination.vue'
 import FormManager from '../components/FormManager.vue'
-import { useFormData, contactFormData } from '@/data'
-import { computed, onMounted, ref } from 'vue'
+import { useFormData, contactFormData, hasFormData, setData } from '@/data'
+import { computed, onMounted, ref, inject } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { TAlert } from '@/components/tailwind'
 
 const KEY = 'CONTACT_FORM'
 
 export default {
   name: 'ContactForm',
-  components: { FormManager, FormPages, FormPagination },
+  components: { FormManager, FormPages, FormPagination, TAlert },
   setup() {
-    const contactForm = useFormData(KEY, contactFormData)
     const loading = ref(false)
     const authStore = useAuthStore()
+    const error = ref('')
+    const success = ref(false)
+    const init = ref(false)
 
-    onMounted(() => {
-      fetch(
-        `https://e68f-156-203-159-109.ngrok-free.app/contacts?email=${authStore.user!.email}&code=${
-          authStore.user!.code
-        }`
-      )
-        .then((res) => res.text())
-        .then(console.log)
+    const $globals = inject('$globals')! as { $api: string }
+    const contactForm = useFormData(KEY, contactFormData)
+
+    onMounted(async () => {
+      if (!hasFormData(KEY)) {
+        const res = await fetch(
+          $globals.$api +
+            '/contacts?email=' +
+            authStore.user!.email +
+            '&code=' +
+            authStore.user!.code
+        )
+        const data = await res.json()
+        contactForm.value = setData(contactFormData, {
+          0: {
+            1: data.phone,
+            2: data.about,
+            4: data.interests['tf-cloud'],
+            5: data.interests['venture-creator'],
+            6: data.interests['licenses'],
+            7: data.interests['dk']
+          }
+        })
+      }
+      init.value = true
     })
+
+    function afterRequest(res: { message?: string }) {
+      loading.value = false
+      if (res.message) {
+        error.value = res.message
+      } else {
+        success.value = true
+      }
+    }
 
     return {
       contactForm,
@@ -68,7 +110,11 @@ export default {
       licenses: computed(() => String(contactForm.value[0][6].value)),
       dk: computed(() => String(contactForm.value[0][7].value)),
       loading,
-      authStore
+      authStore,
+      error,
+      success,
+      afterRequest,
+      init
     }
   }
 }

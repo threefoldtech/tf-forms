@@ -4,7 +4,8 @@
     :class="{
       'bg-blue-50 text-blue-700': type === 'primary',
       'bg-yellow-50 text-yellow-700': type === 'warn',
-      'bg-red-50 text-red-700': type === 'error'
+      'bg-red-50 text-red-700': type === 'error',
+      'bg-green-50 text-green-700': type === 'success'
     }"
   >
     <p class="text-sm">
@@ -20,7 +21,7 @@ export default {
   name: 'TAlert',
   props: {
     type: {
-      type: String as PropType<'primary' | 'warn' | 'error'>,
+      type: String as PropType<'primary' | 'warn' | 'error' | 'success'>,
       default: () => 'primary'
     }
   }
