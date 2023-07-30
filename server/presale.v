@@ -22,7 +22,7 @@ fn (c Presale) to_json() string {
 }
 
 [middleware: check_auth]
-['/presale'; post]
+['/presales'; post]
 pub fn (mut app App) create_or_update_presale() vweb.Result {
 	presale := json.decode(Presale, app.req.data) or {
 		app.set_status(400, 'Bad Request')
