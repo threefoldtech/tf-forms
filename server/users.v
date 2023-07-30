@@ -112,12 +112,12 @@ fn (mut app App) check_verification_code() vweb.Result {
 fn (mut app App) login_admin() !vweb.Result {
 	admin := json.decode(Admin, app.req.data) or {
 		app.set_status(400, 'Bad Request')
-		er := CustomResponse{400, 'failed to decode verification data'}
+		er := CustomResponse{400, 'failed to decode admin data'}
 		return app.json(er.to_json())
 	}
 	if admin.email != app.admin_email || admin.password != app.admin_password {
-		app.set_status(401, 'Unauthorized')
-		er := CustomResponse{400, 'failed to decode login data'}
+		app.set_status(401, 'Invalid credentials')
+		er := CustomResponse{401, 'Invalid credentials'}
 		return app.json(er.to_json())
 	}
 
