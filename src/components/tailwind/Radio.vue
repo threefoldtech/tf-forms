@@ -4,6 +4,7 @@
     :name="name"
     type="radio"
     :value="value"
+    :checked="value === current"
     @input="updateModelValue"
     class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
   />
@@ -22,7 +23,8 @@ export default {
   props: {
     label: { type: String, required: true },
     name: String,
-    value: { type: String, required: true }
+    value: { type: String, required: true },
+    current: String
   },
   emits: { 'update:model-value': (value: string) => value },
   setup(_, { emit }) {

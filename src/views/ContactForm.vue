@@ -77,19 +77,20 @@ export default {
             '&code=' +
             authStore.user!.code
         )
-        const data = await res.json()
-        console.log(data.interests)
+        const data = JSON.parse(await res.json())
 
-        contactForm.value = setData(contactFormData, {
-          0: {
-            1: data.phone,
-            2: data.about
-            // 4: data.interests['tf_cloud'],
-            // 5: data.interests['venture_creator'],
-            // 6: data.interests['licenses'],
-            // 7: data.interests['dk']
-          }
-        })
+        if (!data.message) {
+          contactForm.value = setData(contactFormData, {
+            0: {
+              1: data.phone,
+              2: data.about,
+              4: data.interests['tf_cloud'],
+              5: data.interests['venture_creator'],
+              6: data.interests['licenses'],
+              7: data.interests['dk']
+            }
+          })
+        }
       }
       init.value = true
     })

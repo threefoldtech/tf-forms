@@ -37,7 +37,7 @@ export function setData(
 ): FormInput[][] {
   for (const x in values) {
     for (const y in values[x]) {
-      console.log({ x, y })
+      form[x][y].value = values[x][y]
     }
   }
   return form

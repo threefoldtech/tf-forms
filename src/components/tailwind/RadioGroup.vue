@@ -20,6 +20,7 @@
           :name="name"
           :value="input.value"
           @update:model-value="$emit('update:model-value', $event)"
+          :current="modelValue"
         />
       </div>
     </div>
