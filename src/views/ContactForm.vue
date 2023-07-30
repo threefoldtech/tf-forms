@@ -13,8 +13,8 @@
         phone,
         about,
         interests: {
-          'tf-cloud': cloud,
-          'venture-creator': venture,
+          tf_cloud: cloud,
+          venture_creator: venture,
           licenses,
           dk
         }
@@ -82,8 +82,8 @@ export default {
           0: {
             1: data.phone,
             2: data.about,
-            4: data.interests['tf-cloud'],
-            5: data.interests['venture-creator'],
+            4: data.interests['tf_cloud'],
+            5: data.interests['venture_creator'],
             6: data.interests['licenses'],
             7: data.interests['dk']
           }
