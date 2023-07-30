@@ -16,13 +16,13 @@ __global (
 pub struct App {
 	vweb.Context
 pub mut:
-	postmark_token     string                      [vweb_global]
-	contacts           map[string]Contact          [vweb_global]
-	investments        map[string]Investment       [vweb_global]
-	presales           map[string]Presale          [vweb_global]
-	verification_codes map[string]VerificationCode [vweb_global]
-	admin_email        string                      [vweb_global]
-	admin_password     string                      [vweb_global]
+	postmark_token string [vweb_global]
+	// contacts           map[string]Contact          [vweb_global]
+	// investments        map[string]Investment       [vweb_global]
+	// presales           map[string]Presale          [vweb_global]
+	// verification_codes map[string]VerificationCode [vweb_global]
+	admin_email    string [vweb_global]
+	admin_password string [vweb_global]
 }
 
 pub fn (mut app App) before_request() {
@@ -45,7 +45,7 @@ pub fn (mut app App) check_auth() bool {
 		email = data.email
 		code = data.code
 	}
-	saved_code := app.verification_codes[email] or { return false }
+	saved_code := verification_codes[email] or { return false }
 	if code != saved_code.code {
 		return false
 	}

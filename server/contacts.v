@@ -54,7 +54,7 @@ fn (mut app App) get_contact() vweb.Result {
 	return app.json(ret)
 }
 
-// [middleware: check_admin]
+[middleware: check_admin]
 ['/contacts/all'; get]
 fn (mut app App) get_contacts() vweb.Result {
 	mut contacts_list := []Contact{}

@@ -54,7 +54,7 @@ fn (mut app App) login() !vweb.Result {
 
 fn (mut app App) send_verification_email(email string) !http.Response {
 	code := rand.hex(20)
-	app.verification_codes[email] = VerificationCode{
+	verification_codes[email] = VerificationCode{
 		code: code
 		timestamp: time.now()
 	}
@@ -87,7 +87,7 @@ fn (mut app App) check_verification_code() vweb.Result {
 		er := CustomResponse{400, 'failed to decode verification data'}
 		return app.json(er.to_json())
 	}
-	saved_req := app.verification_codes[verification_req.email] or {
+	saved_req := verification_codes[verification_req.email] or {
 		app.set_status(404, 'Email Not Found')
 		er := CustomResponse{404, 'verification code is not correct'}
 		return app.json(er.to_json())
@@ -97,7 +97,6 @@ fn (mut app App) check_verification_code() vweb.Result {
 		er := CustomResponse{400, "either email doesn't exist or verification code is wrong"}
 		return app.json(er.to_json())
 	}
-	app.verification_codes.delete('email')
 	app.set_status(200, 'OK')
 	return app.json(json.encode({
 		'status': 'ok'
