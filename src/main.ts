@@ -6,7 +6,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
-const $api = 'https://e68f-156-203-159-109.ngrok-free.app'
+const $api = 'http://localhost:8080'
 
 const app = createApp(App)
 app.config.globalProperties.$api = $api
