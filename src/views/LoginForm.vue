@@ -45,7 +45,12 @@
                 <TAlert type="error"> {{ error }} </TAlert>
               </div>
 
-              <div class="mt-2">
+              <div class="mt-5">
+                <div class="mb-2 flex justify-end">
+                  <router-link to="/admin" class="text-sm font-bold text-blue-700">
+                    Login as admin
+                  </router-link>
+                </div>
                 <t-btn type="submit" :loading="loading" block>Login</t-btn>
               </div>
             </FormManager>
