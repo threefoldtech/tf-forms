@@ -58,7 +58,7 @@ pub fn (mut app App) create_or_update_presale() vweb.Result {
 [middleware: check_auth]
 ['/presales'; get]
 fn (mut app App) get_presale() vweb.Result {
-	email := app.query['e	mail'] or {
+	email := app.query['email'] or {
 		app.set_status(400, 'Bad Request')
 		er := CustomResponse{404, presale_not_found}
 		return app.json(er)
