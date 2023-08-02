@@ -63,7 +63,7 @@ export default {
           authStore.user!.code,
         {
           handler: (_: HTMLElement, res: { xhr: XMLHttpRequest }) => {
-            forms.value = _setFormData(JSON.parse(JSON.parse(res.xhr.response)))
+            forms.value = _setFormData(JSON.parse(res.xhr.response))
             loading.value = false
             if (forms.value.length > 0) {
               selectedIndex.value = '0'

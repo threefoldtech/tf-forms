@@ -38,9 +38,6 @@ export default {
       let data = null
       if (evt.detail?.xhr.response) {
         data = JSON.parse(evt.detail.xhr.response)
-        if (typeof data === 'string') {
-          data = JSON.parse(data)
-        }
       }
       emit('after:submit', data)
     }

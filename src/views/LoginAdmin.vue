@@ -104,7 +104,7 @@ export default {
       if (response.message) {
         error.value = response.message
       } else {
-        authStore.login({ email: email.value, code: code.value, isAdmin: true })
+        authStore.addUser({ email: email.value, code: code.value, isAdmin: true })
         router.push('/dashboard/admin/contacts')
       }
     }

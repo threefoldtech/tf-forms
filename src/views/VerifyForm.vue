@@ -93,7 +93,7 @@ export default {
       if (res.message) {
         error.value = res.message
       } else {
-        authStore.login({ email: email.value, code: code.value })
+        authStore.addUser({ email: email.value, code: code.value })
         router.push('/dashboard/forms/contact')
       }
     }

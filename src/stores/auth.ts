@@ -7,48 +7,76 @@ export interface UserModel {
 }
 
 export interface AuthState {
+  users: UserModel[]
   user: UserModel | null
 }
 
 const USER_KEY = 'USER'
+const USERS_KEY = 'USERS'
 
-function getLocalStorageUser() {
-  let user: UserModel | null = null
-  const maybeUser = localStorage.getItem(USER_KEY)
-  if (maybeUser) {
+function getLocalStorage<T>(key: string, fallback: T | null = null): T | null {
+  let value: T | null = fallback
+  const maybeValue = localStorage.getItem(key)
+  if (maybeValue) {
     try {
-      user = JSON.parse(maybeUser)
+      value = JSON.parse(maybeValue)
     } catch {
-      /* pass */
+      /* Pass */
     }
   }
-  return user
+  return value
 }
 
-function setLocalStorageUser(user: UserModel | null) {
+function setLocalStorage<T>(key: string, user: T) {
   if (user === null) {
-    localStorage.removeItem(USER_KEY)
+    localStorage.removeItem(key)
   } else {
-    localStorage.setItem(USER_KEY, JSON.stringify(user))
+    localStorage.setItem(key, JSON.stringify(user))
   }
+}
+
+function clearFormLocalStorage() {
+  setLocalStorage('INVESTMENT_FORM', null)
+  setLocalStorage('CONTACT_FORM', null)
+  setLocalStorage('PRESALE_FORM', null)
 }
 
 export const useAuthStore = defineStore('auth', {
   state(): AuthState {
-    return { user: getLocalStorageUser() }
+    return {
+      users: getLocalStorage<UserModel[]>(USERS_KEY, [])!,
+      user: getLocalStorage<UserModel>(USER_KEY)
+    }
   },
 
   actions: {
+    addUser(user: UserModel) {
+      this.users = [...this.users, user]
+      setLocalStorage(USERS_KEY, this.users)
+      this.login(user)
+    },
+    removeUser(email: string) {
+      this.users = this.users.filter((user) => user.email !== email)
+      setLocalStorage(USERS_KEY, this.users)
+      const currentEmail = this.user?.email
+      this.logout()
+      if (currentEmail === email && this.users.length > 0) {
+        this.login(this.users[0])
+        return true
+      }
+      return false
+    },
     login(user: UserModel) {
-      setLocalStorageUser(user)
-      this.$state.user = user
+      this.user = user
+      setLocalStorage(USER_KEY, user)
+      clearFormLocalStorage()
+      if (user.isAdmin) location.href = '/dashboard/admin/contacts'
+      else location.href = '/dashboard/forms/contact'
     },
     logout() {
-      setLocalStorageUser(null)
-      localStorage.removeItem('PRESALE_FORM')
-      localStorage.removeItem('INVESTMENT_FORM')
-      localStorage.removeItem('CONTACT_FORM')
-      this.$state.user = null
+      this.user = null
+      setLocalStorage(USER_KEY, null)
+      clearFormLocalStorage()
     }
   },
   getters: {

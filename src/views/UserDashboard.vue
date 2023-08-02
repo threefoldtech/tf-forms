@@ -53,7 +53,7 @@
                     class="ml-4 text-sm font-semibold leading-6 text-gray-900"
                     aria-hidden="true"
                   >
-                    {{ authStore.$state.user?.email }}
+                    {{ authStore.user?.email }}
                   </span>
                   <ChevronDownIcon class="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
                 </span>
@@ -67,15 +67,45 @@
                 leave-to-class="transform opacity-0 scale-95"
               >
                 <t-menu-items
-                  class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
+                  class="absolute right-0 z-10 mt-2.5 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
                 >
+                  <t-menu-item
+                    v-slot="{ active }"
+                    v-for="user in authStore.users"
+                    :key="user.email"
+                  >
+                    <a
+                      href="#"
+                      @click.prevent="authStore.login(user)"
+                      class="block px-3 py-1 text-sm leading-6 text-gray-900"
+                      :class="{
+                        'bg-gray-50': active || authStore.user?.email === user.email,
+                        'bg-blue-100 pointer-events-none': authStore.user?.email === user.email
+                      }"
+                    >
+                      {{ user.email }}
+                    </a>
+                  </t-menu-item>
+                  <hr class="my-3" />
+                  <t-menu-item v-slot="{ active }">
+                    <a
+                      href="#"
+                      @click.prevent="$router.push('/login')"
+                      :class="[
+                        active ? 'bg-gray-50' : '',
+                        'block px-3 py-1 text-sm leading-6 text-blue-900'
+                      ]"
+                    >
+                      + Add another account
+                    </a>
+                  </t-menu-item>
                   <t-menu-item v-slot="{ active }">
                     <a
                       href="#"
                       @click.prevent="logout"
                       :class="[
-                        active ? 'bg-gray-50' : '',
-                        'block px-3 py-1 text-sm leading-6 text-gray-900'
+                        active ? 'bg-red-50/100' : '',
+                        'block px-3 py-1 text-sm leading-6 text-red-500'
                       ]"
                     >
                       Logout
@@ -127,11 +157,6 @@ export default {
     const authStore = useAuthStore()
     const router = useRouter()
 
-    function logout() {
-      authStore.logout()
-      router.push('/login')
-    }
-
     const dashboardRoutes = computed(() => {
       if (authStore.isAdmin) {
         return [
@@ -157,6 +182,12 @@ export default {
         }
       ]
     })
+
+    function logout() {
+      if (!authStore.removeUser(authStore.user!.email)) {
+        router.push('/login')
+      }
+    }
 
     return {
       authStore,

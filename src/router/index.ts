@@ -41,18 +41,18 @@ const router = createRouter({
   routes: [
     {
       path: '/login',
-      component: () => import('../views/LoginForm.vue'),
-      beforeEnter: [shouldBeNotLogin]
+      component: () => import('../views/LoginForm.vue')
+      // beforeEnter: [shouldBeNotLogin]
     },
     {
       path: '/verify',
-      component: () => import('../views/VerifyForm.vue'),
-      beforeEnter: [shouldBeNotLogin]
+      component: () => import('../views/VerifyForm.vue')
+      // beforeEnter: [shouldBeNotLogin]
     },
     {
       path: '/admin',
-      component: () => import('../views/LoginAdmin.vue'),
-      beforeEnter: [shouldBeNotLogin]
+      component: () => import('../views/LoginAdmin.vue')
+      // beforeEnter: [shouldBeNotLogin]
     },
     {
       path: '/dashboard',

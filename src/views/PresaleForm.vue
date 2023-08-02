@@ -82,7 +82,7 @@ export default {
             '&code=' +
             authStore.user!.code
         )
-        const data = JSON.parse(await res.json())
+        const data = await res.json()
 
         if (!data.message) {
           presaleForm.value = setData(presaleFormData, {
