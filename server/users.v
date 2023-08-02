@@ -57,7 +57,7 @@ fn (mut app App) login() !vweb.Result {
 	resp := app.send_verification_email(user) or {
 		app.set_status(500, 'Server Error')
 		er := CustomResponse{500, 'failed to send verification email ${err}'}
-		
+
 		return app.json(er)
 	}
 	if resp.status_code != 200 {
@@ -65,7 +65,7 @@ fn (mut app App) login() !vweb.Result {
 		er := CustomResponse{resp.status_code, 'failed to send verification email'}
 		return app.json(er)
 	}
-	
+
 	// save user to database
 	users := sql app.db {
 		select from User where email == user.email
@@ -93,9 +93,7 @@ fn (mut app App) login() !vweb.Result {
 	return app.json(login_data)
 }
 
-
 fn (mut app App) send_verification_email(user User) !http.Response {
-	
 	email_data := EmailData{
 		from: app.sender_email
 		to: user.email
@@ -104,7 +102,7 @@ fn (mut app App) send_verification_email(user User) !http.Response {
 		textbody: 'Hello, please use this verification code: ${user.code} to verify email'
 		messagestream: 'outbound'
 	}
-  	headers := http.new_custom_header_from_map({
+	headers := http.new_custom_header_from_map({
 		'Accept':                  'application/json'
 		'Content-Type':            'application/json'
 		'X-Postmark-Server-Token': '${app.postmark_token}'
@@ -133,7 +131,7 @@ fn (mut app App) check_verification_code() vweb.Result {
 	}
 	if users.len < 1 {
 		app.set_status(404, 'Not Found')
-		er := CustomResponse{404, "user not found"}
+		er := CustomResponse{404, 'user not found'}
 		return app.json(er)
 	}
 	app.set_status(200, 'OK')

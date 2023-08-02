@@ -13,8 +13,6 @@ struct Investment {
 	invest_tf      string
 }
 
-
-
 [middleware: check_auth]
 ['/invests'; post]
 pub fn (mut app App) create_or_update_investment() vweb.Result {

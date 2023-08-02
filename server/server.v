@@ -15,7 +15,7 @@ pub mut:
 	postmark_token string    [vweb_global]
 	admin_email    string    [vweb_global]
 	admin_password string    [vweb_global]
-	sender_email string    [vweb_global]
+	sender_email   string    [vweb_global]
 }
 
 pub fn (mut app App) before_request() {
@@ -34,32 +34,45 @@ pub fn (mut app App) check_auth() bool {
 		email = app.query['email'] or { return false }
 		code = app.query['code'] or { return false }
 	} else {
-		data := json.decode(VerificationData, app.req.data) or { return false }
+		data := json.decode(VerificationData, app.req.data) or {
+			app.set_status(400, 'Bad Request')
+			return false
+		}
 		email = data.email
 		code = data.code
 	}
 	users := sql app.db {
 		select from User where email == email && code == code
 	} or {
+		app.set_status(401, 'Unauthorized')
 		return false
 	}
 	// delete old entry
-	if users.len < 0 {
+	if users.len < 1 {
+		app.set_status(401, 'Unauthorized')
 		return false
 	}
 	duration := time.now() - users[0].timestamp
 	if duration.hours() > 24 * 7 {
+		app.set_status(400, 'Expired Code')
 		return false
 	}
 	return true
 }
 
 pub fn (mut app App) check_admin() bool {
-	email := app.query['email'] or { return false }
-	code := app.query['code'] or { return false }
+	email := app.query['email'] or {
+		app.set_status(400, 'Bad Request')
+		return false
+	}
+	code := app.query['code'] or {
+		app.set_status(400, 'Bad Request')
+		return false
+	}
 	if email == app.admin_email && code == app.admin_password {
 		return true
 	}
+	app.set_status(401, 'Unauthorized')
 	return false
 }
 

@@ -74,6 +74,7 @@ fn (mut app App) get_presale() vweb.Result {
 		er := CustomResponse{404, presale_not_found}
 		return app.json(er)
 	}
+
 	// found presale, return it
 	app.set_status(200, 'OK')
 	return app.json(presales[0])

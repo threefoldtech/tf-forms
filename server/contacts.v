@@ -20,8 +20,6 @@ struct Contact {
 	interests Interests [fkey: 'contact_id']
 }
 
-
-
 [middleware: check_auth]
 ['/contacts'; post]
 fn (mut app App) create_or_update_contact() !vweb.Result {
