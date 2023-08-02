@@ -15,9 +15,10 @@ struct Presale {
 	email        string  [primary; unique]
 	phone        string  [unique]
 	referal_code string
-	phone_orders []Order [fkey: 'presale_id']
-	node_orders  []Order [fkey: 'presale_id']
 	reason       string
+	phone_orders []Order [fkey: 'presale_id']
+	node_orders  []Order  [fkey: 'presale_id']
+	
 }
 
 [middleware: check_auth]
@@ -28,15 +29,14 @@ pub fn (mut app App) create_or_update_presale() vweb.Result {
 		er := CustomResponse{400, invalid_json}
 		return app.json(er)
 	}
-
-	presales_found := sql app.db {
+	presales := sql app.db {
 		select from Presale where email == presale.email
 	} or {
 		app.set_status(500, 'Server Error')
 		return app.text('${err}')
 	}
 	// delete old entry
-	if presales_found.len > 0 {
+	if presales.len > 0 {
 		sql app.db {
 			delete from Presale where email == presale.email
 		} or {
@@ -58,7 +58,7 @@ pub fn (mut app App) create_or_update_presale() vweb.Result {
 [middleware: check_auth]
 ['/presales'; get]
 fn (mut app App) get_presale() vweb.Result {
-	email := app.query['email'] or {
+	email := app.query['e	mail'] or {
 		app.set_status(400, 'Bad Request')
 		er := CustomResponse{404, presale_not_found}
 		return app.json(er)

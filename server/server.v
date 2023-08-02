@@ -86,7 +86,7 @@ fn main() {
 	admin_password := fp.string('admin_password', `p`, '', 'Admin password')
 	sender_email := fp.string('sender_email', `s`, '', 'Sender Email')
 
-	mut db := sqlite.connect('formsdb')!
+	mut db := sqlite.connect('forms.db')!
 	sql db {
 		create table Contact
 	}!
@@ -99,7 +99,6 @@ fn main() {
 	sql db {
 		create table Order
 	}!
-
 	sql db {
 		create table Investment
 	}!
