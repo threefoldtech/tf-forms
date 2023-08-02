@@ -97,7 +97,10 @@ fn main() {
 		create table Presale
 	}!
 	sql db {
-		create table Order
+		create table PhoneOrder
+	}!
+		sql db {
+		create table NodeOrder
 	}!
 	sql db {
 		create table Investment

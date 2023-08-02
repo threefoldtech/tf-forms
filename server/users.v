@@ -27,7 +27,7 @@ struct Admin {
 
 struct User {
 	id        int       [primary; sql: serial]
-	email     string    [primary; unique]
+	email     string    [unique]
 	code      string
 	timestamp time.Time [sql_type: 'DATETIME']
 }

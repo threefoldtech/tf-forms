@@ -3,21 +3,28 @@ module main
 import json
 import vweb
 
-struct Order {
+struct PhoneOrder {
 	id         int    [primary; sql: serial]
 	item       string
 	quantity   string
 	presale_id int
 }
 
+struct NodeOrder {
+	id         int    [primary; sql: serial]
+	item       string
+	quantity   string
+	presale_id int
+}
 struct Presale {
 	id           int     [primary; sql: serial]
-	email        string  [primary; unique]
+	email        string  [unique]
 	phone        string  [unique]
 	referal_code string
 	reason       string
-	phone_orders []Order [fkey: 'presale_id']
-	node_orders  []Order  [fkey: 'presale_id']
+	mut: 
+		phone_orders []PhoneOrder [fkey: 'presale_id']
+		node_orders  []NodeOrder  [fkey: 'presale_id']
 	
 }
 
@@ -39,6 +46,18 @@ pub fn (mut app App) create_or_update_presale() vweb.Result {
 	if presales.len > 0 {
 		sql app.db {
 			delete from Presale where email == presale.email
+		} or {
+			app.set_status(500, 'Failed to Delete presale')
+			return app.text('${err}')
+		}
+		sql app.db {
+			delete from NodeOrder where presale_id == presales[0].id
+		} or {
+			app.set_status(500, 'Failed to Delete presale')
+			return app.text('${err}')
+		}
+		sql app.db {
+			delete from PhoneOrder where presale_id == presales[0].id
 		} or {
 			app.set_status(500, 'Failed to Delete presale')
 			return app.text('${err}')

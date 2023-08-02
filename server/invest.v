@@ -5,7 +5,7 @@ import vweb
 
 struct Investment {
 	id             int    [primary; sql: serial]
-	email          string [primary; unique]
+	email          string [unique]
 	phone          string [unique]
 	referal_code   string
 	invest_slots   string
