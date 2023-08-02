@@ -96,13 +96,16 @@ export default {
 
         case 'invests': {
           return data.map((data) => {
+            console.log(data)
+
             const x = setData([investmentFormData.flat(1)], {
               0: {
                 1: data.phone,
                 2: data.referal_code,
-                3: data.invest_slots,
-                5: data.invest_venture,
-                7: data.invest_tf
+
+                4: data.invest_slots,
+                6: data.invest_venture,
+                8: data.invest_tf
               }
             })
             ;(x as any).email = data.email
@@ -112,20 +115,22 @@ export default {
 
         case 'presales': {
           return data.map((data) => {
+            console.log(data)
+
             const x = setData([presaleFormData.flat(1)], {
               0: {
                 1: data.phone,
                 2: data.referal_code,
 
-                3: data.phone_orders[0].quantity,
-                4: data.phone_orders[1].quantity,
-                5: data.phone_orders[2].quantity,
-                6: data.phone_orders[3].quantity,
+                4: data.phone_orders.find((p: any) => p.item === 'phone0').quantity,
+                5: data.phone_orders.find((p: any) => p.item === 'phoneA').quantity,
+                6: data.phone_orders.find((p: any) => p.item === 'phoneY').quantity,
+                7: data.phone_orders.find((p: any) => p.item === 'phoneX').quantity,
 
-                8: data.node_orders[0].quantity,
-                9: data.node_orders[0].quantity,
+                9: data.node_orders.find((n: any) => n.item === '3NodeSilver').quantity,
+                10: data.node_orders.find((n: any) => n.item === '3NodeGold').quantity,
 
-                11: data.reason
+                12: data.reason
               }
             })
             ;(x as any).email = data.email
