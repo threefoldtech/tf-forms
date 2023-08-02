@@ -6,23 +6,16 @@ import json
 import os
 import flag
 import net.http
+import db.sqlite
 
-__global (
-	contacts           map[string]Contact
-	investments        map[string]Investment
-	presales           map[string]Presale
-	verification_codes map[string]VerificationCode
-)
 pub struct App {
 	vweb.Context
 pub mut:
-	postmark_token string [vweb_global]
-	// contacts           map[string]Contact          [vweb_global]
-	// investments        map[string]Investment       [vweb_global]
-	// presales           map[string]Presale          [vweb_global]
-	// verification_codes map[string]VerificationCode [vweb_global]
-	admin_email    string [vweb_global]
-	admin_password string [vweb_global]
+	db             sqlite.DB
+	postmark_token string    [vweb_global]
+	admin_email    string    [vweb_global]
+	admin_password string    [vweb_global]
+	sender_email string    [vweb_global]
 }
 
 pub fn (mut app App) before_request() {
@@ -45,11 +38,16 @@ pub fn (mut app App) check_auth() bool {
 		email = data.email
 		code = data.code
 	}
-	saved_code := verification_codes[email] or { return false }
-	if code != saved_code.code {
+	users := sql app.db {
+		select from User where email == email && code == code
+	} or {
 		return false
 	}
-	duration := time.now() - saved_code.timestamp
+	// delete old entry
+	if users.len < 0 {
+		return false
+	}
+	duration := time.now() - users[0].timestamp
 	if duration.hours() > 24 * 7 {
 		return false
 	}
@@ -71,13 +69,37 @@ fn main() {
 	fp.version('v0.0.1')
 	fp.skip_executable()
 	postmark_token := fp.string('token', `t`, '', 'Postmark API token')
-	admin_email := fp.string('admin_email', `e`, '', 'Postmark API token')
-	admin_password := fp.string('admin_password', `p`, '', 'Postmark API token')
+	admin_email := fp.string('admin_email', `e`, '', 'Admin Email')
+	admin_password := fp.string('admin_password', `p`, '', 'Admin password')
+	sender_email := fp.string('sender_email', `s`, '', 'Sender Email')
+
+	mut db := sqlite.connect('formsdb')!
+	sql db {
+		create table Contact
+	}!
+	sql db {
+		create table Interests
+	}!
+	sql db {
+		create table Presale
+	}!
+	sql db {
+		create table Order
+	}!
+
+	sql db {
+		create table Investment
+	}!
+	sql db {
+		create table User
+	}!
+
 	mut app := &App{
-		// postmark_token: 'fd590f17-ebad-4f51-adf2-6199a41ea05a'
+		db: db
 		postmark_token: postmark_token
 		admin_email: admin_email
 		admin_password: admin_password
+		sender_email: sender_email
 	}
 	vweb.run(app, 8080)
 }

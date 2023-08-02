@@ -4,21 +4,20 @@ import json
 import vweb
 
 struct Order {
-	item     string
-	quantity string
+	id         int    [primary; sql: serial]
+	item       string
+	quantity   string
+	presale_id int
 }
 
 struct Presale {
-	email        string
-	phone        string
+	id           int     [primary; sql: serial]
+	email        string  [primary; unique]
+	phone        string  [unique]
 	referal_code string
-	phone_orders []Order
-	node_orders  []Order
+	phone_orders []Order [fkey: 'presale_id']
+	node_orders  []Order [fkey: 'presale_id']
 	reason       string
-}
-
-fn (c Presale) to_json() string {
-	return json.encode(c)
 }
 
 [middleware: check_auth]
@@ -27,12 +26,33 @@ pub fn (mut app App) create_or_update_presale() vweb.Result {
 	presale := json.decode(Presale, app.req.data) or {
 		app.set_status(400, 'Bad Request')
 		er := CustomResponse{400, invalid_json}
-		return app.json(er.to_json())
+		return app.json(er)
 	}
 
-	presales[presale.email] = presale
+	presales_found := sql app.db {
+		select from Presale where email == presale.email
+	} or {
+		app.set_status(500, 'Server Error')
+		return app.text('${err}')
+	}
+	// delete old entry
+	if presales_found.len > 0 {
+		sql app.db {
+			delete from Presale where email == presale.email
+		} or {
+			app.set_status(500, 'Failed to Delete presale')
+			return app.text('${err}')
+		}
+	}
+	sql app.db {
+		insert presale into Presale
+	} or {
+		app.set_status(500, 'Server Error')
+		return app.text('${err}')
+	}
+
 	app.set_status(201, 'created')
-	return app.json(presale.to_json())
+	return app.json(presale)
 }
 
 [middleware: check_auth]
@@ -40,28 +60,34 @@ pub fn (mut app App) create_or_update_presale() vweb.Result {
 fn (mut app App) get_presale() vweb.Result {
 	email := app.query['email'] or {
 		app.set_status(400, 'Bad Request')
-		er := CustomResponse{404, contact_not_found}
-		return app.json(er.to_json())
+		er := CustomResponse{404, presale_not_found}
+		return app.json(er)
 	}
-	presale := presales[email] or {
+	presales := sql app.db {
+		select from Presale where email == email
+	} or {
+		app.set_status(500, 'Server Error')
+		return app.text('${err}')
+	}
+	if presales.len < 1 {
 		app.set_status(404, 'Not Found')
 		er := CustomResponse{404, presale_not_found}
-		return app.json(er.to_json())
+		return app.json(er)
 	}
 	// found presale, return it
-	ret := json.encode(presale)
 	app.set_status(200, 'OK')
-	return app.json(ret)
+	return app.json(presales[0])
 }
 
 [middleware: check_admin]
 ['/presales/all'; get]
 fn (mut app App) get_presales() vweb.Result {
-	mut presales_list := []Presale{}
-	for _, presale in presales {
-		presales_list << presale
+	presales := sql app.db {
+		select from Presale
+	} or {
+		app.set_status(500, 'Server Error')
+		return app.text('${err}')
 	}
-	ret := json.encode(presales_list)
 	app.set_status(200, 'OK')
-	return app.json(ret)
+	return app.json(presales)
 }
