@@ -96,8 +96,6 @@ export default {
 
         case 'invests': {
           return data.map((data) => {
-            console.log(data)
-
             const x = setData([investmentFormData.flat(1)], {
               0: {
                 1: data.phone,
@@ -115,8 +113,6 @@ export default {
 
         case 'presales': {
           return data.map((data) => {
-            console.log(data)
-
             const x = setData([presaleFormData.flat(1)], {
               0: {
                 1: data.phone,
