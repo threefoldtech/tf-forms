@@ -48,6 +48,7 @@
                 label="Password"
                 placeholder="Your admin Password"
                 name="password"
+                type="password"
                 required
                 v-model="code"
                 @input="

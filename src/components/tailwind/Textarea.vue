@@ -10,7 +10,7 @@
         :required="required"
         @input="updateModelValue"
         :name="name"
-        :readonly="readonly || false"
+        :disabled="readonly || false"
       />
     </div>
   </div>
